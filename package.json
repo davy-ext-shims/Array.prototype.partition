@@ -1,0 +1,62 @@
+{
+  "name": "@davy-ext-shims/array.prototype.partition",
+  "version": "1.0.0",
+  "description": "Array.prototype.partition polyfill splitting elements into pair of lists by predictor",
+  "main": "index.js",
+  "module": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "test -d .git && husky install || true",
+    "prebuild:spec": "mkdir -p build/spec/",
+    "build:spec": "npx --no-install ecmarkup spec.ecmarkup.html build/spec/index.html --assets inline",
+    "prebuild:source": "mkdir -p build/",
+    "build:source": "npx --no-install tsc-multi",
+    "postbuild:source": "cp package.json README.md build/",
+    "build": "npm run build:spec && npm run build:source"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davy-ext-shims/Array.prototype.partition.git"
+  },
+  "keywords": [
+    "Array.prototype.partition",
+    "array",
+    "partition",
+    "shim",
+    "polyfill"
+  ],
+  "author": "Davy <me@davy.tw>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davy-ext-shims/Array.prototype.partition/issues"
+  },
+  "homepage": "https://github.com/davy-ext-shims/Array.prototype.partition#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@es-shims/api": "^2.2.1",
+    "@types/call-bind": "^1.0.0",
+    "@types/define-properties": "^1.1.3",
+    "@types/es-abstract": "^1.17.3",
+    "@types/node": "^16.9.3",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "ecmarkup": "^9.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "esno": "^0.9.1",
+    "husky": "^7.0.2",
+    "prettier": "^2.4.1",
+    "tsc-multi": "^0.5.0",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "call-bind": "^1.0.2",
+    "define-properties": "^1.1.3",
+    "es-abstract": "^1.18.6",
+    "es-array-method-boxes-properly": "^1.0.0",
+    "is-string": "^1.0.7"
+  }
+}

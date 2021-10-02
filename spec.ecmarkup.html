@@ -1,0 +1,153 @@
+<pre class=metadata>
+  title: Array.prototype.partition
+  status: proposal
+  location: https://github.com/davy-ext-shims/Array.prototype.partition
+  copyright: false
+  contributors:
+    - Tzu-Te Kuo (Davy)
+    - Ecma International
+</pre>
+
+<emu-intro id=introduction>
+  <h1>Introduction</h1>
+  <p>
+    This is the specification for a proposed `Array.prototype.partition` method in JavaScript.
+  </p><p>
+    It is modified from <a href="https://tc39.es/ecma262/#sec-array.prototype.filter">`Array.prototype.filter`</a>
+    in <a href=https://tc39.es/ecma262 />ECMAScript specification</a>.
+  </p>
+</emu-intro>
+
+<emu-clause id="sec-indexed-collections">
+  <h1>Indexed Collections</h1>
+
+  <emu-clause id="sec-array-objects">
+    <h1>Array Objects</h1>
+
+    <emu-clause id="sec-properties-of-the-array-prototype-object">
+      <h1>Properties of the Array Prototype Object</h1>
+
+      <emu-clause id="sec-array.prototype.partition">
+        <h1>Array.prototype.partition ( _predictor_ [ , _thisArg_ ] )</h1>
+
+        <emu-note type=editor>
+          <p>
+            This method works like <a href="https://tc39.es/ecma262/#sec-array.prototype.filter">`Array.prototype.filter`</a>
+            but returns both identical and opposite result in a pair.
+          </p>
+        </emu-note>
+        <emu-note>
+          <p>
+            _predictor_ should be a function that accepts three arguments and returns a value that is coercible to a Boolean value.
+            `partition` calls _predictor_ once for each element in the array, in ascending order,
+            and constructs a new array contains two array,
+            where first array contains values for which _predictor_ returns *true*,
+            while second array contains values for which _predictor_ returns *false*.
+            _predictor_ is called only for elements of the array which actually exist;
+            it is not called for missing elements of the array.
+          </p>
+          <p>
+            If a _thisArg_ parameter is provided, it will be used as the *this* value for each invocation of _predictor_.
+            If it is not provided, *undefined* is used instead.
+          </p>
+          <p>
+            _predictor_ is called with three arguments: the value of the element, the index of the element, and the object being traversed.
+          </p>
+          <p>
+            `partition` does not directly mutate the object on which it is called but the object *may* be mutated by the calls to _predictor_.
+          </p>
+          <p>
+            The range of elements processed by `partition` is set before the first call to _predictor_.
+            Elements which are appended to the array after the call to `partition` begins will not be visited by _predictor_.
+            If existing elements of the array are changed their value as passed to _predictor_ will be the value at the time `partition` visits them;
+            elements that are deleted after the call to `reject` begins and before being visited are not visited.
+          </p>
+        </emu-note>
+
+        <p>When the `partition` method is called, the following steps are taken:</p>
+        <emu-alg>
+          1. Let _O_ be ? ToObject(*this* value).
+          1. Let _len_ be ? LengthOfArrayLike(_O_).
+          1. If IsCallable(_predictor_) is *false*, throw a *TypeError* exception.
+          1. Let _A_ be ? ArraySpeciesCreate(_O_, 0).
+          1. Let _B_ be ? ArraySpeciesCreate(_O_, 0).
+          1. Let _k_ be 0.
+          1. Let _toA_ be 0.
+          1. Let _toB_ be 0.
+          1. Repeat, while _k_ &lt; _len_,
+            1. Let _Pk_ be ! ToString(𝔽(_k_)).
+            1. Let _kPresent_ be ? HasProperty(_O_, _Pk_).
+            1. If _kPresent_ is *true*, then
+              1. Let _kValue_ be ? Get(_O_, _Pk_).
+              1. Let _selected_ be ! ToBoolean(? Call(_predictor_, _thisArg_, &laquo; _kValue_, 𝔽(_k_), _O_ &raquo;)).
+              1. If _selected_ is *true*, then
+                1. Perform ? CreateDataPropertyOrThrow(_A_, ! ToString(𝔽(_toA_)), _kValue_).
+                1. Set _toA_ to _toA_ + 1.
+              1. Else,
+                1. Perform ? CreateDataPropertyOrThrow(_B_, ! ToString(𝔽(_toB_)), _kValue_).
+                1. Set _toB_ to _toB_ + 1.
+            1. Set _k_ to _k_ + 1.
+          1. Let _Pair_ be ? ArrayCreate(2).
+          1. Perform ? CreateDataPropertyOrThrow(_Pair_, ! ToString(*0*<sub>𝔽</sub>), _A_).
+          1. Perform ? CreateDataPropertyOrThrow(_Pair_, ! ToString(*1*<sub>𝔽</sub>), _B_).
+          1. Return _Pair_.
+        </emu-alg>
+        <emu-note>
+          <p>
+            The `partition` function is intentionally generic; it does not require that its *this* value be an Array.
+            Therefore it can be transferred to other kinds of objects for use as a method.
+          </p>
+        </emu-note>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
+
+<emu-annex id="sec-colophon">
+  <h1>Colophon</h1>
+  <p>
+    This specification is authored on <a href="https://github.com/davy-ext-shims/Array.prototype.partition">GitHub</a>
+    in a plaintext source format called <a href="https://github.com/bterlson/ecmarkup">Ecmarkup</a>.
+  </p><p>
+    Ecmarkup is an HTML and Markdown dialect that provides a framework and toolset for authoring ECMAScript specifications
+    in plaintext and processing the specification into a full-featured HTML rendering that follows the editorial
+    conventions for this document. Ecmarkup builds on and integrates a number of other formats and technologies including
+    <a href="https://github.com/rbuckton/grammarkdown">Grammarkdown</a> for defining syntax and
+    <a href="https://github.com/domenic/ecmarkdown">Ecmarkdown</a> for authoring algorithm steps.
+  </p>
+</emu-annex>
+
+<emu-annex id="sec-license">
+  <h1>Copyright & Software License</h1>
+
+  <h2>Copyright Notice</h2>
+  <p>
+    © 2021 Tzu-Te Kuo (Davy) &lt;me@davy.tw&gt;<br>
+    Original ECMAScript specification, copyright © 2021 Ecma International
+  </p>
+  
+  <h2>Software License</h2>
+  <pre>
+MIT License
+
+Copyright (c) 2021 Tzu-Te Kuo (Davy) &lt;me@davy.tw&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+  </pre>
+</emu-annex>
